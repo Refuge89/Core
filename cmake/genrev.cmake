@@ -63,11 +63,11 @@ else()
   endif()
 endif()
 
-# Create the actual revision_data.h file from the above params
+# Create the actual revision.h file from the above params
 if(NOT "${rev_hash_cached}" MATCHES "${rev_hash}" OR NOT "${rev_branch_cached}" MATCHES "${rev_branch}" OR NOT EXISTS "${BUILDDIR}/revision.h")
   configure_file(
     "${CMAKE_SOURCE_DIR}/revision.h.in.cmake"
-    "${BUILDDIR}/revision_data.h"
+    "${BUILDDIR}/revision.h"
     @ONLY
   )
   set(rev_hash_cached "${rev_hash}" CACHE INTERNAL "Cached commit-hash")
