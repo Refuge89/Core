@@ -8,6 +8,9 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+
 if(NOT BUILDDIR)
   # Workaround for funny MSVC behaviour - this segment is only used when using cmake gui
   set(BUILDDIR ${CMAKE_BINARY_DIR})
