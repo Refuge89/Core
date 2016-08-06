@@ -11,14 +11,14 @@ Big thanks to: [SunwellCore] (http://sunwell.pl/) [TrinityCore] (https://www.tri
 
 ## Requirements
 
-*For Windows 7 or newer!
- *Microsoft Visual C++ 2010 express
- *CMake  >|3.3.x|
- *OpenSSL>|1.0.x|
- *MySQL  >|5.1.x|
+* For Windows 7 or newer!
+ * Microsoft Visual C++ 2010 express
+ * CMake  >|3.3.x|
+ * OpenSSL>|1.0.x|
+ * MySQL  >|5.1.x|
 
-*For Unix!
-Soon!
+* For Unix!
+ Soon!
 
 ## License
 
