@@ -3,6 +3,11 @@
 [![3.3.5 Build Status](https://travis-ci.org/ReinsCoreWotlk/Core.svg?branch=master)](https://travis-ci.org/ReinsCoreWotlk/Core)
 
 ## Introduction
+ReinsCoreWotlk is a TrinityCore/MaNGOS/SunwellCore based.
+
+It is completely open source; community involvement is highly encouraged.
+
+Big thanks to:[SunwellCore] (http://sunwell.pl/) [TrinityCore] (https://www.trinitycore.org/) [MaNGOS] (https://www.getmangos.eu/)
 
 ## License
 
