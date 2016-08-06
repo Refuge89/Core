@@ -12,7 +12,9 @@
 # This is done EACH compile so they can be alerted about the consequences.
 
 if(NOT BUILDDIR)
-  # Workaround for funny MSVC behaviour - this segment is only used when using cmake gui
+  # Workaround for funny MSVC behaviour - this segment only run during compile
+  set(NO_GIT ${WITHOUT_GIT})
+  set(GIT_EXEC ${GIT_EXECUTABLE})
   set(BUILDDIR ${CMAKE_BINARY_DIR})
 endif()
 
