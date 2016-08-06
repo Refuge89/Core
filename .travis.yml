@@ -24,3 +24,5 @@ script:
   - cd build
   - cmake ../ -DSCRIPTS=1 -DTOOLS=0
   - make -j8
+  - ./authserver --version
+  - ./worldserver --version
