@@ -400,6 +400,7 @@ bool dtCreateNavMeshData(dtNavMeshCreateParams* params, unsigned char** outData,
 	header->version = DT_NAVMESH_VERSION;
 	header->x = params->tileX;
 	header->y = params->tileY;
+    header->layer = params->tileLayer;
 	header->userId = params->userId;
 	header->polyCount = totPolyCount;
 	header->vertCount = totVertCount;
@@ -416,6 +417,7 @@ bool dtCreateNavMeshData(dtNavMeshCreateParams* params, unsigned char** outData,
 	header->walkableClimb = params->walkableClimb;
 	header->offMeshConCount = storedOffMeshConCount;
 	header->bvNodeCount = params->polyCount*2;
+    header->bvNodeCount = params->buildBvTree ? params->polyCount*2 : 0;
 	
 	const int offMeshVertsBase = params->vertCount;
 	const int offMeshPolyBase = params->polyCount;
@@ -564,8 +566,11 @@ bool dtCreateNavMeshData(dtNavMeshCreateParams* params, unsigned char** outData,
 
 	// Store and create BVtree.
 	// TODO: take detail mesh into account! use byte per bbox extent?
-	createBVTree(params->verts, params->vertCount, params->polys, params->polyCount,
-				 nvp, params->cs, params->ch, params->polyCount*2, navBvtree);
+    if (params->buildBvTree)
+    {
+        createBVTree(params->verts, params->vertCount, params->polys, params->polyCount,
+                     nvp, params->cs, params->ch, params->polyCount*2, navBvtree);
+    }
 	
 	// Store Off-Mesh connections.
 	n = 0;
