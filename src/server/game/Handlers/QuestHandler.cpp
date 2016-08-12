@@ -33,6 +33,9 @@
 #include "ScriptMgr.h"
 #include "GameObjectAI.h"
 
+//Playerbot
+#include "bp_ai.h"
+
 void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket & recvData)
 {
     uint64 guid;
@@ -554,6 +557,8 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
 
                 if ((quest->IsAutoComplete() && quest->IsRepeatable() && !quest->IsDailyOrWeekly()) || quest->HasFlag(QUEST_FLAGS_AUTOCOMPLETE))
                     player->PlayerTalkClass->SendQuestGiverRequestItems(quest, _player->GetGUID(), player->CanCompleteRepeatableQuest(quest), true);
+                if (player->IsPlayerBot())
+                    player->GetPlayerbotAI()->AcceptQuest(quest, _player);
                 else
                 {
                     player->SetDivider(_player->GetGUID());

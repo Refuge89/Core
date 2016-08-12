@@ -54,6 +54,9 @@
 
 #include "Transport.h"
 
+// npcbot
+#include "bot_ai.h"
+
 TrainerSpell const* TrainerSpellData::Find(uint32 spell_id) const
 {
     TrainerSpellMap::const_iterator itr = spellList.find(spell_id);
@@ -271,6 +274,8 @@ void Creature::SearchFormation()
 void Creature::RemoveCorpse(bool setSpawnTime, bool skipVisibility)
 { 
     if (getDeathState() != CORPSE)
+        return;
+    if (bot_AI)
         return;
 
     m_corpseRemoveTime = time(NULL);
@@ -2787,4 +2792,120 @@ void Creature::ReleaseFocus(Spell const* focusSpell)
 
     if (focusSpell->GetSpellInfo()->HasAttribute(SPELL_ATTR5_DONT_TURN_DURING_CAST))
         ClearUnitState(UNIT_STATE_ROTATING);
+}
+
+void Creature::SetIAmABot(bool bot)
+{
+    if (!bot)
+    {
+        IsAIEnabled = false;
+        bot_AI = NULL;
+        SetUInt64Value(UNIT_FIELD_CREATEDBY, 0);
+    }
+}
+
+void Creature::SetBotsPetDied()
+{
+    if (!m_bots_pet)
+        return;
+    m_bots_pet->SetCharmerGUID(0);
+    m_bots_pet->SetCreatureOwner(NULL);
+    //m_bots_pet->GetBotPetAI()->SetCreatureOwner(NULL);
+    m_bots_pet->SetIAmABot(false);
+    m_bot_owner->SetMinion((Minion*)m_bots_pet, false);
+    m_bots_pet->CleanupsBeforeDelete();
+    m_bots_pet->AddObjectToRemoveList();
+    m_bots_pet = NULL;
+}
+
+void Creature::SetBotTank(Unit* newtank)
+{
+    if (!bot_AI || !IsAIEnabled)
+        return;
+    uint64 tankGuid = bot_AI->GetBotTankGuid();
+    if (newtank && newtank->GetGUID() == tankGuid) return;
+    Creature* oldtank = tankGuid && IS_CREATURE_GUID(tankGuid) ? sObjectAccessor->GetObjectInWorld(tankGuid, (Creature* )NULL) : NULL;
+    if (oldtank && oldtank->IsInWorld() && (oldtank->GetIAmABot() || oldtank->GetIAmABotsPet()))
+    {
+        oldtank->RemoveAurasDueToSpell(DEFENSIVE_STANCE_PASSIVE);
+        uint8 ClassOrPetType = oldtank->GetIAmABotsPet() ? bot_pet_ai::GetPetType(oldtank) : oldtank->GetBotClass();
+        oldtank->GetBotAI()->ApplyPassives(ClassOrPetType);
+    }
+    if (newtank == this)
+    {
+        for (uint8 i = 0; i < 3; ++i)
+            AddAura(DEFENSIVE_STANCE_PASSIVE, this);
+        if (Player* owner = m_bot_owner)
+        {
+            switch (urand(1,5))
+            {
+            case 1: MonsterWhisper("I am tank here!", owner->GetGUID()); break;
+            case 2: MonsterWhisper("I will tank now.", owner->GetGUID()); break;
+            case 3: MonsterWhisper("I gonna tank", owner->GetGUID()); break;
+            case 4: MonsterWhisper("I think I will be best tank here...", owner->GetGUID()); break;
+            case 5: MonsterWhisper("I AM the tank!", owner->GetGUID()); break;
+            }
+        }
+        bot_AI->UpdateHealth();
+        if (!isInCombat())
+            SetBotCommandState(COMMAND_FOLLOW, true);
+    }
+    bot_AI->SetBotTank(newtank);
+}
+
+void Creature::SetBotCommandState(CommandStates st, bool force)
+{
+    if (bot_AI && IsAIEnabled)
+        bot_AI->SetBotCommandState(st, force);
+}
+//Bot damage mods
+void Creature::ApplyBotDamageMultiplierMelee(uint32& damage, CalcDamageInfo& damageinfo) const
+{
+    if (bot_AI)
+        bot_AI->ApplyBotDamageMultiplierMelee(damage, damageinfo);
+}
+void Creature::ApplyBotDamageMultiplierMelee(int32& damage, SpellNonMeleeDamage& damageinfo, SpellInfo const* spellInfo, WeaponAttackType attackType, bool& crit) const
+{
+    if (bot_AI)
+        bot_AI->ApplyBotDamageMultiplierMelee(damage, damageinfo, spellInfo, attackType, crit);
+}
+void Creature::ApplyBotDamageMultiplierSpell(int32& damage, SpellNonMeleeDamage& damageinfo, SpellInfo const* spellInfo, WeaponAttackType attackType, bool& crit) const
+{
+    if (bot_AI)
+        bot_AI->ApplyBotDamageMultiplierSpell(damage, damageinfo, spellInfo, attackType, crit);
+}
+
+bool Creature::GetIAmABot() const
+{
+    return bot_AI ? bot_AI->IsMinionAI() : false;
+}
+
+bool Creature::GetIAmABotsPet() const
+{
+    return bot_AI ? bot_AI->IsPetAI() : false;
+}
+
+bot_minion_ai* Creature::GetBotMinionAI() const
+{
+    return IsAIEnabled && bot_AI && bot_AI->IsMinionAI() ? const_cast<bot_minion_ai*>(bot_AI->GetMinionAI()) : NULL;
+}
+
+bot_pet_ai* Creature::GetBotPetAI() const
+{
+    return IsAIEnabled && bot_AI && bot_AI->IsPetAI() ? const_cast<bot_pet_ai*>(bot_AI->GetPetAI()) : NULL;
+}
+
+void Creature::InitBotAI(bool asPet)
+{
+    ASSERT(!bot_AI);
+
+    if (asPet)
+        bot_AI = (bot_pet_ai*)AI();
+    else
+        bot_AI = (bot_minion_ai*)AI();
+}
+
+void Creature::SetBotShouldUpdateStats()
+{
+    if (bot_AI) bot_AI->SetShouldUpdateStats();
 }

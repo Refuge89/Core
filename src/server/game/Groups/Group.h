@@ -319,6 +319,9 @@ class Group
 			_difficultyChangePreventionType = type;
 		}
 
+        //Bot
+        uint64 const *GetTargetIcons() const { return m_targetIcons; }
+
     protected:
         void _homebindIfInstance(Player* player);
         void _cancelHomebindIfInstance(Player* player);
