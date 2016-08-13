@@ -52,7 +52,6 @@ struct dtNavMeshCreateParams
 	// Tile location
 	unsigned int userId;					// User ID bound to the tile.
 	int tileX, tileY;						// Tile location (tile coords).
-    int tileLayer;                          //< The tile's layer within the layered destination mesh. [Limit: >= 0] (Along the y-axis.)
 	float bmin[3], bmax[3];					// Tile bounds (wu).
 	// Settings
 	float walkableHeight;					// Agent height (wu).
@@ -61,10 +60,6 @@ struct dtNavMeshCreateParams
 	float cs;								// Cell size (xz) (wu).
 	float ch;								// Cell height (y) (wu).
 	int tileSize;							// Tile size (width & height) (vx).
-
-	/// True if a bounding volume tree should be built for the tile.
-	/// @note The BVTree is not normally needed for layered navigation meshes.
-    bool buildBvTree;
 };
 
 // Build navmesh data from given input data.

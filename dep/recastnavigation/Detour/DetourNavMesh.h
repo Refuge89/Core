@@ -150,7 +150,6 @@ struct dtMeshHeader
 	int magic;								// Magic number, used to identify the data.
 	int version;							// Data version number.
 	int x, y;								// Location of the time on the grid.
-	int layer;                              //< The layer of the tile within the dtNavMesh tile grid. (x, y, layer)
 	unsigned int userId;					// User ID of the tile.
 	int polyCount;							// Number of polygons in the tile.
 	int vertCount;							// Number of vertices in the tile.
