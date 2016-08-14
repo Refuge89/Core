@@ -38,8 +38,8 @@
 #ifdef _WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
-char serviceLongName[] = "SunwellCore world service";
-char serviceDescription[] = "SunwellCore World of Warcraft emulator world service";
+char serviceLongName[] = "ReinsCoreWotlk world service";
+char serviceDescription[] = "ReinsCoreWotlk World of Warcraft emulator world service";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -132,6 +132,33 @@ extern int main(int argc, char** argv)
         return 1;
     }
     sLog->outString("Using configuration file %s.", cfg_file);
+
+
+    sLog->outString("                       ░                                ░");
+    sLog->outString("              ▄▓▄    ░          ░░░▄▄▄▄▄▄▄▄▄▄░░░░         ░");
+    sLog->outString("               ▀     ░ ░   ▄▄▄██▓▓▓▓▓▓▓███▓▓▓▓▓▓▓▓▄▄▄   ░ ░");
+    sLog->outString("                    ▄▄▄██████▓▓▓▓▓▓▓▓▓▓▓█▓▓▓▓▓▓▓▓▓▓██████▄▄▄");
+    sLog->outString("                 ▄███▀▀  ▄██▓▓▓▓█████▓▓▓▓▓▓█████▓▓▓▓▓█▄  ▀▀███▄░");
+    sLog->outString("                ▓█▓   ░   ▀████████████▓▓████████████▀    ░ ░▓█▓░");
+    sLog->outString("               ▓██▌ ░░  ▒    ▀▀▀██████▓▓▓███████▀▀▀    ▒   ░ ▐██▓░");
+    sLog->outString("               ▐██▄░░░   ▓▓       ▀▀███▓████▀▀       ▓▓    ░░▄██▌");
+    sLog->outString("               ░▀██▌ ░░    ▀██▄    ░░ ▄▒█▄       ▄██▀    ░░░▐██▀░");
+    sLog->outString("             ▄▒▒▒▄▀█▄▄ ░░░░    ░░▄▄▄▓▓▓█▓▓▓▄▄▄▄░░     ░░░ ▄▄▓▀▄▒▒▄▄");
+    sLog->outString("            ▐▓▓▓▓▓███████▄▄▄▄█▒▓▓▓▓▓███████▓▓▓▓▒▒▒▒▄▄▄▄███████▓▓▓▓▓▌");
+    sLog->outString("           ░▓█▓▓█████████████████████▀▀ ▀▀▀█████▓▓▓▓▓████████████▓▓▓ ░");
+    sLog->outString("            ▐█▓▓▓█████▓▓▓█████▓███▀░  ▄▓▄   ░▀████▓██████████████▓▓▌");
+    sLog->outString("             ▀▀█▒▒▓▓▓▓▀▀░ ▀▀▀██▓█▌░ ░▓█▓██▄ ░▐██▓▓█▀▀▀  ▀▀██▓▓▓▒▒▀▀");
+    sLog->outString("                  ▀ ░░ ▄    ▒█▓▓▓█▄ ▐██▓██▌░▄███▓▓█▒    ▄ ▄  ▀  ░");
+    sLog->outString(" ▄        ▄   ▄ ▄▄▄▄▄▄▀█▄ ░▓█▓▓▓████▄█▓▓▓█▄██████▓▓█▓░ ▄█▀█▄▄▄▄▄ ▄   ▄        ▄");
+    sLog->outString("        ▄   ▄ ▄ ▄▄▄▄▄▄▀▄▄ ▀█▓▓▓████████▓██████████▓▓█▀ ▄▄▀▄▄▄▄▄▄ ▄ ▄   ▄");
+    sLog->outString("                     █▀█  ▒▄ ▄▀▀▀▀▀████▓▓████▀▀▀▀▀▄ ▄▒  █▀█");
+    sLog->outString("                     ▓ ▓ ░▓█▓▐██▀▄▄▄ ▄▄ ▄▄▄ ▄▄▄▀▓█▌▓█▓░ ▓ ▓");
+    sLog->outString("                     ▒ ▒ ▐█▒ ▐▓░ ▐▓░ ▐▓░▐█▌ ░▓▌  ▒▌ ▒█▌ ▒ ▒");
+    sLog->outString("                     ░ ░ ▀   ▀ ▄ ▀  ▄ ▀▄ ▀ ▄  ▀ ▄ ▀   ▀ ░ ░");
+    sLog->outString("                     ░ ░        ▀ ░▀ ▀▀ ▀▀▀ ▀░ ▀        ░ ░");
+    sLog->outString("                     ░ ░         ▀▓▓▓▓██████▓▓▀         ░ ░");
+    sLog->outString("              ReinsCoreWotlk 2016(c) Open-sourced Game Emulation ");
+    sLog->outString("         <https://github.com/ReinsCoreWotlk/Core> ReinsCoreWotlk 3.3.5 ");
 
     sLog->outString("Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
     sLog->outString("Using ACE version: %s", ACE_VERSION);

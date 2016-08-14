@@ -8,8 +8,13 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+
 if(NOT BUILDDIR)
-  # Workaround for funny MSVC behaviour - this segment is only used when using cmake gui
+  # Workaround for funny MSVC behaviour - this segment only run during compile
+  set(NO_GIT ${WITHOUT_GIT})
+  set(GIT_EXEC ${GIT_EXECUTABLE})
   set(BUILDDIR ${CMAKE_BINARY_DIR})
 endif()
 
@@ -21,7 +26,7 @@ else()
   if(GIT_EXECUTABLE)
     # Create a revision-string that we can use
     execute_process(
-      COMMAND "${GIT_EXECUTABLE}" describe --long --match init --dirty=+ --abbrev=12
+      COMMAND "${GIT_EXECUTABLE}" describe --long --match init --dirty=+ --abbrev=12 --always
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
       OUTPUT_VARIABLE rev_info
       OUTPUT_STRIP_TRAILING_WHITESPACE
