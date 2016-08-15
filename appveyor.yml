@@ -8,6 +8,10 @@ os: Visual Studio 2015
 platform:
   - x64
 
+# specify custom environment variables
+environment:
+MSVC_DEFAULT_OPTIONS: ON
+
 # build configuration, i.e. Debug, Release, etc.
 configuration:
   - Debug
@@ -37,7 +41,3 @@ build:
 
 # unit test
 test: off
-
-artifacts:
-  - path: bin\$(platform)_$(configuration)
-    name: $(APPVEYOR_PROJECT_NAME)_$(platform)_$(configuration)
