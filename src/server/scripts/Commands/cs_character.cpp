@@ -509,92 +509,62 @@ public:
         return true;
     }
 
-    static bool HandlePDumpWriteCommand(ChatHandler* handler, char const* args)
-    {
-        if (!*args)
-            return false;
+	static bool HandlePDumpWriteCommand(ChatHandler* handler, char const* args)
+	{
+		if (!*args)
+			return false;
 
-        char* fileStr = strtok((char*)args, " ");
-        char* playerStr = strtok(NULL, " ");
+		char* fileStr = strtok((char*)args, " ");
+		char* playerStr = strtok(NULL, " ");
 
-		if (!fileStr && !playerStr)
+		if (!fileStr || !playerStr)
+			return false;
+
+		uint64 guid;
+		// character name can't start from number
+		if (isNumeric(playerStr))
+			guid = MAKE_NEW_GUID(atoi(playerStr), 0, HIGHGUID_PLAYER);
+		else
 		{
-			QueryResult result = CharacterDatabase.PQuery("SELECT guid FROM characters");
-			if (!result)
-				return true;
-			do{
-				uint64 _guid = result->Fetch()[0].GetUInt64();
-				char buff[20];
-				sprintf(buff,"%u.dump", _guid);
-				switch(PlayerDumpWriter().WriteDump(buff, uint32(_guid)))
-				{
-					case DUMP_SUCCESS:
-						handler->PSendSysMessage(LANG_COMMAND_EXPORT_SUCCESS);
-						break;
-					case DUMP_FILE_OPEN_ERROR:
-						handler->PSendSysMessage(LANG_FILE_OPEN_FAIL, buff);
-						handler->SetSentErrorMessage(true);
-						return false;
-					case DUMP_CHARACTER_DELETED:
-						handler->PSendSysMessage(LANG_COMMAND_EXPORT_DELETED_CHAR);
-						handler->SetSentErrorMessage(true);
-						return false;
-					default:
-						handler->PSendSysMessage(LANG_COMMAND_EXPORT_FAILED);
-						handler->SetSentErrorMessage(true);
-						return false;
-				}
-			}while(result->NextRow());
+			std::string name = handler->extractPlayerNameFromLink(playerStr);
+			if (name.empty())
+			{
+				handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+				handler->SetSentErrorMessage(true);
+				return false;
+			}
+
+			guid = sObjectMgr->GetPlayerGUIDByName(name);
 		}
 
-        if (!fileStr || !playerStr)
-            return false;
+		if (!sObjectMgr->GetPlayerAccountIdByGUID(guid))
+		{
+			handler->PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+			handler->SetSentErrorMessage(true);
+			return false;
+		}
 
-        uint64 guid;
-        // character name can't start from number
-        if (isNumeric(playerStr))
-            guid = MAKE_NEW_GUID(atoi(playerStr), 0, HIGHGUID_PLAYER);
-        else
-        {
-            std::string name = handler->extractPlayerNameFromLink(playerStr);
-            if (name.empty())
-            {
-                handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
-                handler->SetSentErrorMessage(true);
-                return false;
-            }
+		switch (PlayerDumpWriter().WriteDump(fileStr, uint32(guid)))
+		{
+		case DUMP_SUCCESS:
+			handler->PSendSysMessage(LANG_COMMAND_EXPORT_SUCCESS);
+			break;
+		case DUMP_FILE_OPEN_ERROR:
+			handler->PSendSysMessage(LANG_FILE_OPEN_FAIL, fileStr);
+			handler->SetSentErrorMessage(true);
+			return false;
+		case DUMP_CHARACTER_DELETED:
+			handler->PSendSysMessage(LANG_COMMAND_EXPORT_DELETED_CHAR);
+			handler->SetSentErrorMessage(true);
+			return false;
+		default:
+			handler->PSendSysMessage(LANG_COMMAND_EXPORT_FAILED);
+			handler->SetSentErrorMessage(true);
+			return false;
+		}
 
-            guid = sObjectMgr->GetPlayerGUIDByName(name);
-        }
-
-        if (!sObjectMgr->GetPlayerAccountIdByGUID(guid))
-        {
-            handler->PSendSysMessage(LANG_PLAYER_NOT_FOUND);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        switch (PlayerDumpWriter().WriteDump(fileStr, uint32(guid)))
-        {
-            case DUMP_SUCCESS:
-                handler->PSendSysMessage(LANG_COMMAND_EXPORT_SUCCESS);
-                break;
-            case DUMP_FILE_OPEN_ERROR:
-                handler->PSendSysMessage(LANG_FILE_OPEN_FAIL, fileStr);
-                handler->SetSentErrorMessage(true);
-                return false;
-            case DUMP_CHARACTER_DELETED:
-                handler->PSendSysMessage(LANG_COMMAND_EXPORT_DELETED_CHAR);
-                handler->SetSentErrorMessage(true);
-                return false;
-            default:
-                handler->PSendSysMessage(LANG_COMMAND_EXPORT_FAILED);
-                handler->SetSentErrorMessage(true);
-                return false;
-        }
-
-        return true;
-    }
+		return true;
+	}
 };
 
 void AddSC_character_commandscript()
