@@ -8,10 +8,6 @@ os: Visual Studio 2015
 platform:
   - x64
 
-# specify custom environment variables
-environment:
-MSVC_DEFAULT_OPTIONS: ON
-
 # build configuration, i.e. Debug, Release, etc.
 configuration:
   - Debug
@@ -36,8 +32,7 @@ before_build:
 # build settings
 build:
   project: C:\Projects\ReinsCoreWotlk\build\ReinsCoreWotlk.sln     # path to Visual Studio solution or project
-  parallel: true                                                   # enable MSBuild parallel builds
-  verbosity: quiet                                                 # MSBuild verbosity level (quiet|minimal|normal|detailed)
+  parallel: false                                                  # enable MSBuild parallel builds
 
 # unit test
 test: off
