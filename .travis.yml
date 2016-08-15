@@ -1,10 +1,9 @@
 sudo: required
 dist: trusty
 
-compiler:
-  - gcc
-
 language: cpp
+compiler:
+  - clang
 
 git:
   depth: 1
