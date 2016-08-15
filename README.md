@@ -15,13 +15,17 @@ Big thanks to: [SunwellCore] (http://sunwell.pl/) [TrinityCore] (https://www.tri
 ## Requirements
 
 * For Windows 7 or newer!
- * Microsoft Visual C++ 2010 express
- * CMake  >|3.3.x|
+ * Visual Studio 2015
+ * CMake  >|2.8.9|
  * OpenSSL>|1.0.x|
  * MySQL  >|5.1.x|
+ 
+* For x64 Windows
+ * Build ONLY at x64
 
 * For Unix!
- Soon!
+ * Follow TC [GUIDE] (https://trinitycore.atlassian.net/wiki/display/tc/Linux+Requirements).
+ * Don't Install Boost!
 
 ## License
 
