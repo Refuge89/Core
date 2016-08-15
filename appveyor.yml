@@ -15,7 +15,7 @@ configuration:
   - Release
 
 # clone directory
-clone_folder: C:\Projects\ReinsCoreWotlk\build\
+clone_folder: C:\Projects\ReinsCoreWotlk\
 
 # branches to build
 branches:
