@@ -31,6 +31,12 @@ before_build:
   - md build && cd build
   - cmake ../ -G"Visual Studio 14 Win64" -DTOOLS=true -DCMAKE_CXX_FLAGS=" /DWIN32 /D_WINDOWS /W3 /GR /EHsc /WX" -DCMAKE_C_FLAGS="/DWIN32 /D_WINDOWS /W3 /WX"
 
+# build settings
+build:
+  project: C:\Projects\ReinsCoreWotlk\build\ReinsCoreWotlk.sln.sln # path to Visual Studio solution or project
+  parallel: true                                                   # enable MSBuild parallel builds
+  verbosity: quiet                                                 # MSBuild verbosity level (quiet|minimal|normal|detailed)
+
 # unit test
 test: off
 
