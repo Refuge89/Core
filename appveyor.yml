@@ -14,35 +14,6 @@ configuration:
   - Debug
   - Release
 
-# scripts that are called at very beginning, before repo cloning
-init:
-    # This script will delete already existing tag with its release when it already exist.
-    # This should be done to correctly update tag details and to avoid mixed release under same tag (if one fail).
-    # The principle is to delete the tag and release whenever we found it and the commit hash is different than current.
-    # Do not modify this script for security reason
-  - ps: >-
-        function Delete-Github-Release($gitHubRepository, $releaseVersion, $commitHash, $token){
-            $baseReleaseUrl = "https://api.github.com/repos/$gitHubRepository/releases";
-            $ref_endpoint = "https://api.github.com/repos/$gitHubRepository/git/refs/tags"
-            $getReleaseId = @{Uri = "$baseReleaseUrl" + "?access_token=$token"; Method = "GET";}
-            $wr_error = 'True'; try {$result = Invoke-WebRequest @getReleaseId;} catch {$wr_error = 'False';}
-            if ($result.StatusCode -ne 200 -or $wr_error -eq 'False') {Write-Host "No release found so nothing to delete." -f Yellow; return;}
-            $releasesData = ConvertFrom-Json $result.Content; $releaseInfos = $null;
-            if ($releasesData -is [system.array] -and $releasesData.Count -ge "1") {foreach ($releaseItr in $releasesData) {if ($releaseItr.name -eq $releaseVersion) { $releaseInfos = $releaseItr; break;}}}
-            if ($releaseInfos -eq $null) {Write-Host "Release $releaseVersion is not found, nothing to delete." -f Yellow; return;}
-            if ($releaseInfos.target_commitish -ne $commitHash){
-                $id = $releaseInfos.id; $delBaseReleaseUrl = "$baseReleaseUrl/$id" + "?access_token=$token"
-                Write-Host "Deleting release $releaseVersion..." -f Yellow;
-                $delReleaseParams = @{Uri = $delBaseReleaseUrl; Method = "DELETE";}
-                $wr_error = 'True'; try { $delRelResult = Invoke-WebRequest @delReleaseParams; } catch { $wr_error = 'False'; }
-                if ($wr_error -eq 'False' -or $delRelResult.StatusCode -eq 204) {Write-Host "$releaseVersion release is deleted" -f Green;} else {Write-Host "ERROR cannot delete $releaseVersion" -f Red;}
-                Write-Host "Deleting release tag $releaseVersion..." -f Yellow;
-                $delTagBaseUrl = "$ref_endpoint/$releaseVersion" + "?access_token=$token";
-                $delTagParams = @{Uri = $delTagBaseUrl; Method = "DELETE";}
-                $wr_error = 'True'; try {$delTagResult = Invoke-WebRequest @delTagParams;} catch {$wr_error = 'False';}
-                if ($wr_error -eq 'False' -or $delTagResult.StatusCode -eq 204) {Write-Host "$releaseVersion tag is deleted" -f Green;} else {Write-Host "ERROR cannot delete $releaseVersion" -f Red;}}
-            else {Write-Host "Skipping tag delete because its same commit!" -f Yellow;}}
-
 # clone directory
 clone_folder: C:\Projects\ReinsCoreWotlk\Source\
 
