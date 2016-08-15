@@ -33,7 +33,7 @@ before_build:
 
 # build settings
 build:
-  project: C:\Projects\ReinsCoreWotlk\build\ReinsCoreWotlk.sln.sln # path to Visual Studio solution or project
+  project: C:\Projects\ReinsCoreWotlk\build\ReinsCoreWotlk.sln     # path to Visual Studio solution or project
   parallel: true                                                   # enable MSBuild parallel builds
   verbosity: quiet                                                 # MSBuild verbosity level (quiet|minimal|normal|detailed)
 
