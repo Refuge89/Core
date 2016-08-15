@@ -3,7 +3,10 @@
       Status       |
 -------------------|
 [![3.3.5 Build Status](https://travis-ci.org/ReinsCoreWotlk/Core.svg?branch=master)](https://travis-ci.org/ReinsCoreWotlk/Core) |
-
+-------------------|
+[![Build status](https://ci.appveyor.com/api/projects/status/86l1jh78gwdx6gx2?svg=true)](https://ci.appveyor.com/project/eXPeRi91/core) |
+-------------------|
+[![Build status](https://scan.coverity.com/projects/9884/badge.svg)](https://scan.coverity.com/projects/reinscorewotlk-core) |
 
 ## Introduction
 ReinsCoreWotlk is a TrinityCore/MaNGOS/SunwellCore based.
