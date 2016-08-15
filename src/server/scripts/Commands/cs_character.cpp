@@ -22,11 +22,6 @@ Comment: All character related commands
 Category: commandscripts
 EndScriptData */
 
-#include <windows.h>
-#include <tlhelp32.h>
-#include <stdio.h>
-#include <tchar.h>
-
 #include "AccountMgr.h"
 #include "Chat.h"
 #include "ObjectMgr.h"
