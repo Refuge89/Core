@@ -29,8 +29,7 @@ skip_tags: true
 # scripts to run before build
 before_build:
   - md build && cd build
-  - echo Running cmake...
-  - cmake -G"Visual Studio 14 Win64" -DTOOLS=true -DCMAKE_CXX_FLAGS=" /DWIN32 /D_WINDOWS /W3 /GR /EHsc /WX" -DCMAKE_C_FLAGS="/DWIN32 /D_WINDOWS /W3 /WX"
+  - cmake ../ -G"Visual Studio 14 Win64" -DTOOLS=true -DCMAKE_CXX_FLAGS=" /DWIN32 /D_WINDOWS /W3 /GR /EHsc /WX" -DCMAKE_C_FLAGS="/DWIN32 /D_WINDOWS /W3 /WX"
 
 # unit test
 test: off
