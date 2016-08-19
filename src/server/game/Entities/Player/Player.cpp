@@ -504,7 +504,7 @@ inline void KillRewarder::_InitXP(Player* player)
     // * otherwise, not in PvP;
     // * not if killer is on vehicle.
     if (_isBattleGround || (!_isPvP && !_killer->GetVehicle()))
-        _xp = Trinity::XP::Gain(player, _victim);
+        _xp = Trinity::XP::Gain(player, _victim, _isBattleGround);
 
 	if (_xp && !_isBattleGround && _victim) // pussywizard: npcs with relatively low hp give lower exp
 		if (_victim->GetTypeId() == TYPEID_UNIT)
@@ -7366,6 +7366,20 @@ uint32 Player::GetArenaTeamIdFromStorage(uint32 guid, uint8 slot)
 	if (GlobalPlayerData const* playerData = sWorld->GetGlobalPlayerData(guid))
 		return playerData->arenaTeamId[slot];
 	return 0;
+}
+
+uint32 Player::GetArenaTeamIdFromDB(uint64 guid, uint8 type)
+{
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ARENA_TEAM_ID_BY_PLAYER_GUID);
+    stmt->setUInt32(0, GUID_LOPART(guid));
+    stmt->setUInt8(1, type);
+    PreparedQueryResult result = CharacterDatabase.Query(stmt);
+
+    if (!result)
+        return 0;
+
+    uint32 id = (*result)[0].GetUInt32();
+    return id;
 }
 
 uint32 Player::GetZoneIdFromDB(uint64 guid)
@@ -20407,7 +20421,7 @@ void Player::TextEmote(const std::string& text)
 { 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_EMOTE, LANG_UNIVERSAL, this, this, text);
-    SendMessageToSetInRange_OwnTeam(&data, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), true);
+    SendMessageToSetInRange(&data, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), true, !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHAT));
 }
 
 void Player::Whisper(const std::string& text, uint32 language, uint64 receiver)
@@ -22154,6 +22168,16 @@ void Player::LeaveBattleground(Battleground* bg)
 
 	if (!bg)
 		return;
+
+    // Deserter tracker - leave BG
+    if (bg->isBattleground() && sWorld->getBoolConfig(CONFIG_BATTLEGROUND_TRACK_DESERTERS) 
+        && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+    {
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
+        stmt->setUInt32(0, GetGUIDLow());
+        stmt->setUInt8(1, BG_DESERTION_TYPE_LEAVE_BG);
+        CharacterDatabase.Execute(stmt);
+    }
 
 	// xinef: reset corpse reclaim time
 	m_deathExpireTime = time(NULL);

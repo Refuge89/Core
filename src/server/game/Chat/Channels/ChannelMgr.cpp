@@ -30,6 +30,9 @@ ChannelMgr::~ChannelMgr()
 
 ChannelMgr* ChannelMgr::forTeam(TeamId teamId)
 {
+    if (sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
+        return ACE_Singleton<AllianceChannelMgr, ACE_Null_Mutex>::instance();
+
     if (teamId == TEAM_ALLIANCE)
         return ACE_Singleton<AllianceChannelMgr, ACE_Null_Mutex>::instance();
 
@@ -81,7 +84,7 @@ void ChannelMgr::LoadChannels()
 			while (banResult->NextRow());
 		}
 
-		if (channelDBId > ChannelMgr::_channelIdMax) 			ChannelMgr::_channelIdMax = channelDBId;
+		if (channelDBId > ChannelMgr::_channelIdMax)			ChannelMgr::_channelIdMax = channelDBId;
 		++count;
     }
     while (result->NextRow());

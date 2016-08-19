@@ -192,10 +192,14 @@ class InstanceScript : public ZoneScript
         // Cast spell on all players in instance
         void DoCastSpellOnPlayers(uint32 spell);
 
+        // Return wether server allow two side groups or not
+        bool ServerAllowsTwoSideGroups() { return sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GROUP); }
+
         virtual bool SetBossState(uint32 id, EncounterState state);
         EncounterState GetBossState(uint32 id) const { return id < bosses.size() ? bosses[id].state : TO_BE_DECIDED; }
+        static std::string GetBossStateName(uint8 state);
         BossBoundaryMap const* GetBossBoundary(uint32 id) const { return id < bosses.size() ? &bosses[id].boundary : NULL; }
-		BossInfo const* GetBossInfo(uint32 id) const { return &bosses[id]; } 
+        BossInfo const* GetBossInfo(uint32 id) const { return &bosses[id]; } 
 
         // Achievement criteria additional requirements check
         // NOTE: not use this if same can be checked existed requirement types from AchievementCriteriaRequirementType
@@ -212,6 +216,8 @@ class InstanceScript : public ZoneScript
         void SendEncounterUnit(uint32 type, Unit* unit = NULL, uint8 param1 = 0, uint8 param2 = 0);
 
         virtual void FillInitialWorldStates(WorldPacket& /*data*/) {}
+
+        uint32 GetEncounterCount() const { return bosses.size(); }
 
     protected:
         void SetBossNumber(uint32 number) { bosses.resize(number); }

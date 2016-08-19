@@ -995,7 +995,37 @@ enum TrinityStrings
     LANG_COMMAND_NO_OUTDOOR_PVP_FORUND  = 5034,
     LANG_CALL_FOR_HELP                  = 5035,
     LANG_NPCINFO_EQUIPMENT              = 5036,
-    // Room for more Trinity strings      5037-9999
+    LANG_NPCINFO_MECHANIC_IMMUNE        = 5037,
+    LANG_NPCINFO_UNIT_FIELD_FLAGS       = 5038,
+    LANG_CONSOLE                        = 5039,
+    LANG_CHARACTER                      = 5040,
+    LANG_PERMANENTLY                    = 5041,
+    LANG_GPS_POSITION_OUTDOORS          = 5042,
+    LANG_GPS_POSITION_INDOORS           = 5043,
+    LANG_GPS_NO_VMAP                    = 5044,
+
+    // Instance commands
+    LANG_COMMAND_LIST_BIND_INFO         = 5045,
+    LANG_COMMAND_LIST_BIND_PLAYER_BINDS = 5046,
+    LANG_COMMAND_LIST_BIND_GROUP_BINDS  = 5047,
+    LANG_COMMAND_INST_UNBIND_UNBINDING  = 5048,
+    LANG_COMMAND_INST_UNBIND_UNBOUND    = 5049,
+    LANG_COMMAND_INST_STAT_LOADED_INST  = 5050,
+    LANG_COMMAND_INST_STAT_PLAYERS_IN   = 5051,
+    LANG_COMMAND_INST_STAT_SAVES        = 5052,
+    LANG_COMMAND_INST_STAT_PLAYERSBOUND = 5053,
+    LANG_COMMAND_INST_STAT_GROUPSBOUND  = 5054,
+    LANG_NOT_DUNGEON                    = 5055, // Map is not a dungeon.
+    LANG_NO_INSTANCE_DATA               = 5056, // Map has no instance data.
+    LANG_COMMAND_INST_SET_BOSS_STATE    = 5057,
+    LANG_COMMAND_INST_GET_BOSS_STATE    = 5058,
+
+    // Mutehistory commands
+    LANG_COMMAND_MUTEHISTORY            = 5059,
+    LANG_COMMAND_MUTEHISTORY_EMPTY      = 5060,
+    LANG_COMMAND_MUTEHISTORY_OUTPUT     = 5061,
+
+    // Room for more Trinity strings      5062-9999
 
     // Level requirement notifications
     LANG_SAY_REQ                        = 6604,
